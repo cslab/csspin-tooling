@@ -16,7 +16,7 @@ Prerequisites
    python -m pip install csspin
 
 Using csspin-tooling
--------------------
+--------------------
 
 Add the package and the desired plugins to your project's ``spinfile.yaml``:
 
