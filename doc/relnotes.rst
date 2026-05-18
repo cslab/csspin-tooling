@@ -40,3 +40,14 @@
 =============
 Release Notes
 =============
+
+v1.0.0-rc1
+===========
+
+May 18, 2026
+
+Enhancements
+------------
+
+- Add ``sbomasm`` plugin for assembling and enriching CycloneDX SBOMs
+  (`!1 <https://code.contact.de/qs/spin/csspin-tooling/-/merge_requests/1>`_)

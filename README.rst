@@ -1,6 +1,5 @@
 ``csspin-tooling`` is maintained by `CONTACT Software GmbH`_ and provides
-plugins for CONTACT Product Operations and Development (ConPod) workflows
-using the `csspin`_ task runner.
+utility plugins and tasks to be used with the `csspin`_ task runner.
 
 The following plugins are available:
 
