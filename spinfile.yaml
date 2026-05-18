@@ -6,7 +6,7 @@ spin:
 
 plugin_packages:
   - csspin-docs
-  - csspin-python[uv]@git+https://code.contact.de/qs/spin/spin_python.git@bts-python-sbom # FIXME: remove before merge
+  - csspin-python[uv]>=3.1.0-rc1
   - -e .
 
 plugins:
