@@ -17,8 +17,8 @@
 csspin-tooling documentation
 ============================
 
-The ``csspin-tooling`` plugin-package for `csspin`_ provides plugins for
-CONTACT Product Operations and Development related workflows.
+The ``csspin-tooling`` plugin-package for `csspin`_ provides utility plugins and
+tasks.
 
 ``csspin-tooling`` requires at least Python 3.10.
 
