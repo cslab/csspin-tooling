@@ -1,0 +1,6 @@
+# -*- mode: yaml; coding: utf-8 -*-
+
+include:
+  - project: qs/spin/spin_plugin_common
+    ref: v3.0.0
+    file: ci/.gitlab-ci.yml

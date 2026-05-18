@@ -1,0 +1,34 @@
+# The spinfile.yaml for csspin-tooling is used for development and building
+# the documentation.
+
+spin:
+  project_name: csspin-tooling
+
+plugin_packages:
+  - csspin-docs
+  - csspin-python[uv]@git+https://code.contact.de/qs/spin/spin_python.git@bts-python-sbom # FIXME: remove before merge
+  - -e .
+
+plugins:
+  - csspin_docs.sphinx
+  - csspin_python.uv_provisioner
+  - csspin_tooling.sbomasm
+
+python:
+  version: 3.11.9
+  requirements:
+    - sphinx-rtd-theme
+
+sphinx:
+  docs: doc
+
+uv_provisioner:
+  enabled: true
+
+build_rules:
+  task docs:
+    sources: doc/_schemaref.rst
+  doc/_schemaref.rst:
+    sources: [src/csspin_tooling]
+    spin:
+      - schemadoc sbomasm --rst -o doc/plugins/sbomasm_schemaref.rst

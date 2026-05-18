@@ -1,0 +1,8 @@
+plugin_packages:
+  - ../../..
+plugins:
+  - csspin_tooling.sbomasm
+python:
+  version: "3.10.9"
+sbomasm:
+  version: "2.0.3"
