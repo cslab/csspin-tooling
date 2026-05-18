@@ -1,0 +1,6 @@
+-e .
+csspin
+csspin-python[uv]@git+https://code.contact.de/qs/spin/spin_python.git@bts-python-sbom # FIXME: remove before merge
+pytest
+pytest-cov
+mypy

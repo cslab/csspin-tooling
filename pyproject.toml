@@ -1,0 +1,207 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=77", "setuptools_scm>=8"]
+
+[project]
+authors = [
+  {name = "CONTACT Software GmbH", email = "info@contact-software.com"}
+]
+classifiers = [
+  "Environment :: Console",
+  "Development Status :: 3 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development"
+]
+dependencies = ["csspin-python"]
+description = "Plugin-package for csspin providing common tooling for csspin-based projects"
+dynamic = ["version", "readme"]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+maintainers = [
+  {name = "Benjamin Thomas Schwertfeger", email = "benjaminthomas.schwertfeger@contact-software.com"},
+  {name = "Fabian Hafer", email = "fabian.hafer@contact-software.com"},
+  {name = "Waleri Enns", email = "waleri.enns@contact-software.com"}
+]
+name = "csspin-tooling"
+requires-python = ">=3.10"
+
+[project.urls]
+"CONTACT Software GmbH" = "https://contact-software.com"
+Documentation = "https://csspin-tooling.readthedocs.io/en/stable/"
+"Issue Tracker" = "https://github.com/cslab/csspin-tooling/issues"
+"Release Notes" = "https://csspin-tooling.readthedocs.io/en/stable/relnotes.html"
+Repository = "https://github.com/cslab/csspin-tooling"
+
+[tool.coverage.report]
+include = ["src/csspin_tooling/*"]
+precision = 2
+
+[tool.coverage.run]
+parallel = true
+relative_files = true
+
+[tool.isort]
+# The profile must be 'black', to avoid conflicting reordering caused by
+# isort and black sorting at the same time.
+known_first_party = ["cs", "cdb*"]
+multi_line_output = 3
+profile = "black"
+
+[tool.mypy]
+# ===== Untyped definitions and calls
+#
+check_untyped_defs = true
+color_output = true
+disallow_any_decorated = false
+disallow_any_explicit = false
+disallow_any_expr = false
+disallow_any_generics = false
+# ===== Disallow dynamic typing
+#
+disallow_any_unimported = false
+disallow_incomplete_defs = true
+disallow_subclassing_any = false
+disallow_untyped_calls = true
+disallow_untyped_decorators = false  # since click's decorators are untyped
+disallow_untyped_defs = true
+error_summary = true
+files = ["*.py"]
+hide_error_codes = false
+# ===== Suppressing errors
+#
+ignore_errors = false
+ignore_missing_imports = true  # TODO: Should be false but need csspin stubs
+# ===== None and Optional handling
+#
+implicit_optional = false
+pretty = true
+python_version = "3.10"
+show_absolute_path = true
+show_column_numbers = true
+# ===== Configuring error messages
+#
+show_error_context = true
+strict_optional = true
+warn_no_return = true
+# ===== Configuring warnings
+#
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.pylint.imports]
+# Deprecated modules which should not be used, separated by a comma.
+deprecated-modules = ["regsub", "TERMIOS", "Bastion", "rexec", "cgi"]
+
+[tool.pylint.main]
+# Files or directories to be skipped. They should be base names, not paths.
+# CON: exclude the usual candidates
+ignore = [".svn", "node_modules", ".git", "build", "pytest.py"]
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use.
+# CON: 0 to use all available cores (it actually works and scales quite good).
+jobs = 0
+
+[tool.pylint.messages_control]
+# Only show warnings with the listed confidence levels. Leave empty to show
+# all. Valid levels: HIGH, CONTROL_FLOW, INFERENCE, INFERENCE_FAILURE,
+# UNDEFINED.
+# CON: excluding INFERENCE_FAILURE to decrease the number of false positives
+confidence = ["HIGH", "CONTROL_FLOW", "INFERENCE", "UNDEFINED"]
+# CON: We disable lots of rules to make Pylint less verbose and
+# actually usable. We do it for different reasons. First, we don't
+# check code formatting: nowadays, this is the job of
+# auto-formatters (black in this case). Second, there are some
+# informational rules which can be useful for setup debugging but
+# aren't useful day-to-day. Third, some rules are just bad/too
+# rigid/raise too many false positives.
+#
+# ** Setup debugging **
+# (I0011) locally-disabled
+# (I0013) file-ignored
+# (I0020) suppressed-message
+# (I0021) useless-suppression
+# (I0022) deprecated-pragma
+# (I0023) use-symbolic-message-instead
+# (I1101) c-extension-no-member: generates too many false positives, since we cannot load all c-extensions of external modules
+#
+# ** Bad/Too rigid/Generates too many false positives **
+# (C0103) invalid-name: too restricting
+# (C0303) trailing-whitespace: pre-commit
+# (C0415) import-outside-toplevel: too restricting
+# (E0401) import-error: pylint would need access to all third-party packages
+# (R1705) no-else-return: is allowed by PEP8 and is too rigid
+#
+# ** Not PyLints job **
+# (C0301) line-too-long: black
+# (C0304) missing-final-newline: black
+# (C0305) trailing-newlines: black
+# (W0311) bad-indentation: black
+# (C0327) mixed-line-endings: black
+# (C0410) multiple-imports: isort
+# (C0411) wrong-import-order: isort
+# (C0412) ungrouped-imports: isort
+# (C0413) wrong-import-position: isort
+#
+# ** Local modifications **
+# (W1203) logging-fstring-interpolation: "code consistency" > "potential, minimal performance drop"
+disable = [
+  "bad-indentation",
+  "c-extension-no-member",
+  "deprecated-pragma",
+  "file-ignored",
+  "import-error",
+  "invalid-name",
+  "import-outside-toplevel",
+  "line-too-long",
+  "locally-disabled",
+  "logging-fstring-interpolation",
+  "missing-final-newline",
+  "mixed-line-endings",
+  "multiple-imports",
+  "no-else-return",
+  "suppressed-message",
+  "trailing-newlines",
+  "trailing-whitespace",
+  "ungrouped-imports",
+  "unidiomatic-typecheck",
+  "useless-suppression",
+  "use-symbolic-message-instead",
+  "wrong-import-order",
+  "wrong-import-position",
+  "duplicate-code"
+]
+
+[tool.pylint.miscellaneous]
+# List of note tags to take in consideration, separated by a comma.
+# CON: added some more
+notes = ["FIXME", "XXX", "TODO", "TBC", "TBD"]
+
+[tool.pylint.reports]
+# Activate the evaluation score.
+# CON: to make the output more concise
+score = "no"
+
+[tool.pytest.ini_options]
+markers = ["acceptance", "integration", "wip"]
+
+[tool.setuptools.dynamic]
+readme = {file = "README.rst", content-type = "text/x-rst"}
+
+[tool.setuptools.package-data]
+csspin_tooling = ["*_schema.yaml"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
