@@ -5,6 +5,8 @@ The following plugins are available:
 
 - ``csspin_tooling.sbomasm``: Assembles multiple CycloneDX SBOM files into a
   single enriched top-level SBOM using the `sbomasm`_ tool.
+- ``csspin_tooling.fetch_vex``: Downloads a CycloneDX VEX file for a given
+  package version from Dependency-Track.
 
 Prerequisites
 -------------
@@ -31,6 +33,7 @@ Add the package and the desired plugins to your project's ``spinfile.yaml``:
 
     plugins:
       - csspin_tooling.sbomasm
+      - csspin_tooling.fetch_vex
 
     python:
       version: "3.11.9"

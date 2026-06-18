@@ -127,6 +127,6 @@ repos:
       - id: mypy
         exclude: ^tests/
         args: [--config-file=pyproject.toml]
-        additional_dependencies: [types-PyYAML]
+        additional_dependencies: [types-PyYAML, types-requests]
 default_language_version:
   python: python3

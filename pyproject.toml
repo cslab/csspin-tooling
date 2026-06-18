@@ -19,7 +19,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Topic :: Software Development"
 ]
-dependencies = ["csspin-python"]
+dependencies = ["csspin-python", "requests"]
 description = "Plugin-package for csspin providing common tooling for csspin-based projects"
 dynamic = ["version", "readme"]
 license = "Apache-2.0"
@@ -27,7 +27,8 @@ license-files = ["LICENSE"]
 maintainers = [
   {name = "Benjamin Thomas Schwertfeger", email = "benjaminthomas.schwertfeger@contact-software.com"},
   {name = "Fabian Hafer", email = "fabian.hafer@contact-software.com"},
-  {name = "Waleri Enns", email = "waleri.enns@contact-software.com"}
+  {name = "Waleri Enns", email = "waleri.enns@contact-software.com"},
+  {name = "Lena Herkommer", email = "lena.herkommer@contact-software.com"}
 ]
 name = "csspin-tooling"
 requires-python = ">=3.10"
