@@ -28,4 +28,5 @@ tasks.
 
    installation.rst
    plugins/sbomasm.rst
+   plugins/fetch_vex.rst
    relnotes.rst

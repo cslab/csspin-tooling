@@ -13,6 +13,7 @@ plugins:
   - csspin_docs.sphinx
   - csspin_python.uv_provisioner
   - csspin_tooling.sbomasm
+  - csspin_tooling.fetch_vex
 
 python:
   version: 3.11.9
@@ -32,3 +33,4 @@ build_rules:
     sources: [src/csspin_tooling]
     spin:
       - schemadoc sbomasm --rst -o doc/plugins/sbomasm_schemaref.rst
+      - schemadoc fetch_vex --rst -o doc/plugins/fetch_vex_schemaref.rst

@@ -1,0 +1,27 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema for the fetch_vex plugin for spin
+
+fetch_vex:
+  type: object
+  help: |
+    The fetch_vex plugin pulls the VEX data from Dependency-Track and stores it in a local JSON file for later bundling.
+  properties:
+    project_name:
+      type: str
+      help: Project name as it is known to Dependency-Track
+    project_version:
+      type: str
+      help: Project version as it is known to Dependency-Track
+    deptrack_url:
+      type: str
+      help: Dependency-Track instance to connect to
+    deptrack_api_key:
+      type: secret
+      help: API key for Dependency-Track
+    cyclonedx_version:
+      type: str
+      help: CycloneDX specification version for the VEX file
+    target_directory:
+      type: path
+      help: Directory to store the VEX JSON file in

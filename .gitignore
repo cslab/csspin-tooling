@@ -63,3 +63,6 @@ pkgtest_instances/
 # virtual and working environments
 .spin*
 venv*/
+
+# secrets!
+.env
