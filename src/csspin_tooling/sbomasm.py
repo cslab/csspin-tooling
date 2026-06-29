@@ -38,7 +38,7 @@ from csspin_python.python import get_project_metadata
 from path import Path
 
 defaults = config(
-    version="2.0.3",
+    version="2.0.8",
     install_dir="{spin.data}/sbomasm",
     use=None,
     output_file="{spin.project_name}.cdx.json",
