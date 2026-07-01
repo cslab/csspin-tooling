@@ -1,0 +1,57 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Copyright (C) 2026 CONTACT Software GmbH
+# https://www.contact-software.com/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Default SBOM quality policy for the csspin_tooling.sbomqs plugin.
+#
+# The blacklist covers copyleft licenses incompatible with commercial
+# distribution. Required fields name, version, and license apply to all
+# components.
+
+policy:
+  # we also ensure license compliance in Dependency Track, so this rule here is
+  # just to receive early feedback.
+  - name: prohibited license
+    type: blacklist
+    rules:
+      - field: license
+        patterns:
+          - GPL-.* # includes LGPL and AGPL
+          - EUPL-.*
+          - CC-BY-SA.*
+          - CC-BY-NC.*
+          - CC-BY-ND.*
+    action: fail
+  - name: name
+    type: required
+    rules:
+      - field: name
+    action: fail
+  - name: version
+    type: required
+    rules:
+      - field: version
+    action: fail
+  - name: license
+    type: required
+    rules:
+      - field: license
+    action: fail
+  - name: purl
+    type: required
+    rules:
+      - field: purl
+    action: warn # will be fail as soon as we have that in place

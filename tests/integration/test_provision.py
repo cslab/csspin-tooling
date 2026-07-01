@@ -19,6 +19,7 @@
 
 from __future__ import annotations
 
+import os
 import shlex
 import subprocess
 import sys
@@ -28,6 +29,7 @@ import pytest
 
 YAMLS = "tests/integration/yamls"
 SBOMASM_VERSION = "2.0.3"
+SBOMQS_VERSION = "2.0.9"
 
 
 def execute_spin(yaml: str, env: PathlibPath, cmd: str = "") -> str:
@@ -55,41 +57,59 @@ def execute_spin(yaml: str, env: PathlibPath, cmd: str = "") -> str:
         raise
 
 
-def _binary(tmp_path: PathlibPath) -> PathlibPath:
-    exe = "sbomasm.exe" if sys.platform == "win32" else "sbomasm"
-    return tmp_path / "sbomasm" / SBOMASM_VERSION / exe
+def _binary(
+    tmp_path: PathlibPath, tool: str, version: str, install_subdir: str
+) -> PathlibPath:
+    exe = f"{tool}.exe" if sys.platform == "win32" else tool
+    return tmp_path / install_subdir / version / exe
 
 
 @pytest.mark.integration
-def test_sbomasm_provision(tmp_path: PathlibPath) -> None:
-    """Test the sbomasm provision task in various scenarios."""
-    yaml = "sbomasm.yaml"
+@pytest.mark.parametrize(
+    "tool, version, install_subdir, supports_use",
+    [
+        ("sbomasm", SBOMASM_VERSION, "sbomasm", True),
+        ("sbomqs", SBOMQS_VERSION, "csspin_tooling/sbomqs", False),
+    ],
+)
+def test_provision(
+    tmp_path: PathlibPath,
+    tool: str,
+    version: str,
+    install_subdir: str,
+    supports_use: bool,
+) -> None:
+    """Test the provision task of a tool plugin in various scenarios."""
+    yaml = f"{tool}.yaml"
     execute_spin(yaml=yaml, env=tmp_path, cmd="cleanup")
 
-    # 1. Check that when sbomasm.use is set, provision skips downloading the
+    # 1. Check that when <tool>.use is set, provision skips downloading the
     #    binary.
-    execute_spin(
-        yaml=yaml,
-        env=tmp_path,
-        cmd="-p sbomasm.use=sbomasm provision",
-    )
-    assert not _binary(
-        tmp_path
-    ).exists(), "Binary should not be downloaded when sbomasm.use is set"
-    execute_spin(yaml=yaml, env=tmp_path, cmd="cleanup")
+    if supports_use:
+        execute_spin(yaml=yaml, env=tmp_path, cmd=f"-p {tool}.use={tool} provision")
+        assert not _binary(
+            tmp_path, tool, version, install_subdir
+        ).exists(), f"Binary should not be downloaded when {tool}.use is set"
+        execute_spin(yaml=yaml, env=tmp_path, cmd="cleanup")
 
-    # 2. Check that provision downloads sbomasm and that the binary is
+    # 2. Check that provision downloads the tool and that the binary is
     #    executable.
     execute_spin(yaml=yaml, env=tmp_path, cmd="provision")
 
-    binary = _binary(tmp_path)
-    assert binary.exists(), f"sbomasm binary not found at {binary}"
+    binary = _binary(tmp_path, tool, version, install_subdir)
+    assert binary.exists(), f"{tool} binary not found at {binary}"
+    assert os.access(binary, os.X_OK), f"{tool} binary is not executable: {binary}"
     output = subprocess.check_output(
         [str(binary), "version"], encoding="utf-8", stderr=subprocess.STDOUT
     )
-    assert SBOMASM_VERSION in output
+    assert version in output
 
-    # 3. Ensure that a second regular provision run uses the cached binary
+    # 3. Ensure the tool's task group is runnable through spin (exits non-zero
+    #    on failure, which execute_spin re-raises).
+    group_run = execute_spin(yaml=yaml, env=tmp_path, cmd=tool)
+    assert f"spin {tool}" in group_run
+
+    # 4. Ensure that a second regular provision run uses the cached binary
     #    without re-downloading
     second_run = execute_spin(yaml=yaml, env=tmp_path, cmd="-v provision")
-    assert "using cached sbomasm" in second_run.lower()
+    assert f"using cached {tool}" in second_run.lower()
