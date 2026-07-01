@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import email.utils
+import os
 import sys
 from tempfile import TemporaryDirectory
 
@@ -32,6 +33,7 @@ from csspin import (
     extract,
     group,
     info,
+    setenv,
 )
 from csspin.tree import ConfigTree
 from csspin_python.python import get_project_metadata
@@ -39,8 +41,7 @@ from path import Path
 
 defaults = config(
     version="2.0.8",
-    install_dir="{spin.data}/sbomasm",
-    use=None,
+    install_dir="{spin.data}/csspin_tooling/sbomasm",
     output_file="{spin.project_name}.cdx.json",
     format=config(spec="cyclonedx", version="1.6"),
     requires=config(spin=["csspin_python.python"]),
@@ -49,8 +50,13 @@ defaults = config(
 
 def provision(cfg: ConfigTree) -> None:
     """Provision the plugin"""
-    if not cfg.sbomasm.use:
-        _provision_sbomasm(cfg)
+    _provision_sbomasm(cfg)
+
+
+def init(cfg: ConfigTree) -> None:
+    """Make the managed sbomasm binary discoverable on ``PATH``."""
+    sbomasm_dir = cfg.sbomasm.install_dir / cfg.sbomasm.version
+    setenv(PATH=os.pathsep.join((sbomasm_dir, "{PATH}")))
 
 
 @group()
@@ -96,13 +102,6 @@ def _provision_sbomasm(cfg: ConfigTree) -> None:
         extract(archive_path, sbomasm_install_dir, f"sbomasm{cfg.platform.exe}")
 
 
-def _sbomasm_binary(cfg: ConfigTree) -> Path:
-    """Return the path to the sbomasm binary to use."""
-    if cfg.sbomasm.use:
-        return Path(cfg.sbomasm.use)
-    return cfg.sbomasm.install_dir / cfg.sbomasm.version / f"sbomasm{cfg.platform.exe}"
-
-
 def _assemble_sbom(cfg: ConfigTree) -> None:
     """Merge SBOMs in the working directory into ``cfg.sbomasm.output_file``.
 
@@ -126,7 +125,7 @@ def _assemble_sbom(cfg: ConfigTree) -> None:
 
     metadata = get_project_metadata(cfg.spin.project_root, cfg.python.index_url)
     args = [
-        str(_sbomasm_binary(cfg)),
+        "sbomasm",
         "assemble",
         "-m",
         "-n",
@@ -168,7 +167,7 @@ def _enrich_sbom(cfg: ConfigTree) -> None:
     )
 
     args = [
-        str(_sbomasm_binary(cfg)),
+        "sbomasm",
         "edit",
         "--subject",
         "primary-component",

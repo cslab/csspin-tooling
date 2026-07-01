@@ -18,8 +18,12 @@ task group with two tasks, each hooked into the `sbom:*` lifecycle via `when=`:
   extracted via `csspin_python.python.get_project_metadata`. Authors are parsed
   from RFC 2822 `Author-email` into sbomasm's `name (email)` format.
 
-`provision(cfg)` downloads the sbomasm release binary (Linux/Windows x86_64)
-into `{spin.data}/sbomasm/{version}` if not cached, unless `use` overrides it.
+`provision(cfg)` always downloads the sbomasm release binary (Linux/Windows
+x86_64) into `{spin.data}/csspin_tooling/sbomasm/{version}` if not cached.
+
+The `init` hook prepends that versioned dir to `PATH` (same pattern as
+`sbomqs`), so tasks invoke the binary as plain `sbomasm`. There is no `use`
+override.
 
 ### `sbomqs`
 
@@ -60,8 +64,8 @@ Runtime dep: `requests`. No `provision` step.
 
 ## Schemas
 
-- `sbomasm_schema.yaml` — `version` (sbomasm release), `install_dir`, `use`
-  (override binary), `output_file` (default `{spin.project_name}.cdx.json`),
+- `sbomasm_schema.yaml` — `version` (sbomasm release), `install_dir`,
+  `output_file` (default `{spin.project_name}.cdx.json`),
   `format.spec` (`cyclonedx` or `spdx`), `format.version`.
 - `sbomqs_schema.yaml` — `version` (sbomqs release), `install_dir`,
   `input_file` (default `{spin.project_name}.cdx.json`),
