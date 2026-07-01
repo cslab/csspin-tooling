@@ -14,11 +14,6 @@ sbomasm:
     install_dir:
       type: path
       help: The installation directory to install sbomasm versions into
-    use:
-      type: path
-      help: |
-        Can be used to specify a custom sbomasm binary to use instead of the one
-        installed by the plugin
     output_file:
       type: path
       help: The file path to write the generated SBOM to

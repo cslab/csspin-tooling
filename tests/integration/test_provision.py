@@ -66,10 +66,10 @@ def _binary(
 
 @pytest.mark.integration
 @pytest.mark.parametrize(
-    "tool, version, install_subdir, supports_use",
+    "tool, version, install_subdir",
     [
-        ("sbomasm", SBOMASM_VERSION, "sbomasm", True),
-        ("sbomqs", SBOMQS_VERSION, "csspin_tooling/sbomqs", False),
+        ("sbomasm", SBOMASM_VERSION, "csspin_tooling/sbomasm"),
+        ("sbomqs", SBOMQS_VERSION, "csspin_tooling/sbomqs"),
     ],
 )
 def test_provision(
@@ -77,22 +77,12 @@ def test_provision(
     tool: str,
     version: str,
     install_subdir: str,
-    supports_use: bool,
 ) -> None:
     """Test the provision task of a tool plugin in various scenarios."""
     yaml = f"{tool}.yaml"
     execute_spin(yaml=yaml, env=tmp_path, cmd="cleanup")
 
-    # 1. Check that when <tool>.use is set, provision skips downloading the
-    #    binary.
-    if supports_use:
-        execute_spin(yaml=yaml, env=tmp_path, cmd=f"-p {tool}.use={tool} provision")
-        assert not _binary(
-            tmp_path, tool, version, install_subdir
-        ).exists(), f"Binary should not be downloaded when {tool}.use is set"
-        execute_spin(yaml=yaml, env=tmp_path, cmd="cleanup")
-
-    # 2. Check that provision downloads the tool and that the binary is
+    # 1. Check that provision downloads the tool and that the binary is
     #    executable.
     execute_spin(yaml=yaml, env=tmp_path, cmd="provision")
 
@@ -104,12 +94,12 @@ def test_provision(
     )
     assert version in output
 
-    # 3. Ensure the tool's task group is runnable through spin (exits non-zero
+    # 2. Ensure the tool's task group is runnable through spin (exits non-zero
     #    on failure, which execute_spin re-raises).
     group_run = execute_spin(yaml=yaml, env=tmp_path, cmd=tool)
     assert f"spin {tool}" in group_run
 
-    # 4. Ensure that a second regular provision run uses the cached binary
+    # 3. Ensure that a second regular provision run uses the cached binary
     #    without re-downloading
     second_run = execute_spin(yaml=yaml, env=tmp_path, cmd="-v provision")
     assert f"using cached {tool}" in second_run.lower()

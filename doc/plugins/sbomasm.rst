@@ -104,17 +104,6 @@ Both tasks hook into the ``sbomasm`` task group and the ``sbom`` workflow. If
 The output file defaults to ``<project_name>.cdx.json``. Its location can be
 overridden via the ``sbomasm.output_file`` option.
 
-How to use a pre-installed sbomasm binary?
-##########################################
-
-Set ``sbomasm.use`` to the path of an existing binary to skip the automatic
-download during provisioning:
-
-.. code-block:: bash
-    :caption: Using a local sbomasm installation
-
-    spin -p sbomasm.use=/usr/local/bin/sbomasm sbomasm assemble
-
 ``csspin_tooling.sbomasm`` schema reference
 ###########################################
 
