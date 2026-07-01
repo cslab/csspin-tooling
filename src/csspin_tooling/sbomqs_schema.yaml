@@ -1,0 +1,24 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema for the sbomqs plugin for csspin
+
+sbomqs:
+  type: object
+  help: |
+    The sbomqs plugin wraps around the sbomqs tool to gate SBOMs against a
+    quality policy.
+  properties:
+    version:
+      type: str
+      help: Version of sbomqs to use
+    install_dir:
+      type: path
+      help: The installation directory to install sbomqs versions into
+    input_file:
+      type: path
+      help: The SBOM file to gate against the policy
+    policy_file:
+      type: path
+      help: |
+        Path to a policy file to gate against. Defaults to the bundled default
+        policy; set this to override it.

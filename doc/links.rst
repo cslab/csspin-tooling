@@ -16,5 +16,6 @@
 
 .. _csspin: https://pypi.org/project/csspin/
 .. _sbomasm: https://github.com/interlynk-io/sbomasm
+.. _sbomqs: https://github.com/interlynk-io/sbomqs
 .. _CycloneDX: https://cyclonedx.org/
 .. _csspin-workflows.stdworkflows: https://csspin-workflows.readthedocs.io/en/stable/plugins/stdworkflows.html
