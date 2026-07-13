@@ -22,7 +22,8 @@ import re
 from dataclasses import dataclass
 
 import requests
-from csspin import config, die, info, mkdir, task, writetext
+from click import STRING
+from csspin import argument, config, die, info, mkdir, task, writetext
 from csspin.tree import ConfigTree
 from path import Path
 
@@ -31,13 +32,16 @@ FILENAME_FALLBACK = "vex.json"
 # -- Spin task -----------------------------------------------------------------
 defaults = config(
     project_name="{spin.project_name}",
-    target_directory="{spin.project_root}/.data/",
+    target_directory="{spin.project_root}",
     cyclonedx_version="1.6",
 )
 
 
 @task()
-def fetch_vex(cfg: ConfigTree) -> None:
+def fetch_vex(
+    cfg: ConfigTree,
+    project_version: argument(type=STRING, required=True),  # type: ignore[valid-type]
+) -> None:
     """Automated VEX file download for Dependency-Track.
 
     Fetches the VEX data for the configured project from the configured
@@ -49,13 +53,12 @@ def fetch_vex(cfg: ConfigTree) -> None:
         (cfg.fetch_vex.deptrack_url, "fetch_vex.deptrack_url"),
         (cfg.fetch_vex.deptrack_api_key, "fetch_vex.deptrack_api_key"),
         (cfg.fetch_vex.project_name, "fetch_vex.project_name"),
-        (cfg.fetch_vex.project_version, "fetch_vex.project_version"),
     )
     for value, desc in required_inputs:
         if not value:
             die(f"Required configuration value {desc} missing")
 
-    target_project = Project(cfg.fetch_vex.project_name, cfg.fetch_vex.project_version)
+    target_project = Project(cfg.fetch_vex.project_name, project_version)
     deptrack = DepTrackAPI(
         cfg.fetch_vex.deptrack_url,
         cfg.fetch_vex.deptrack_api_key,
