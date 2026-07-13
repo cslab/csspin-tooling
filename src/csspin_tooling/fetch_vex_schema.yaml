@@ -10,9 +10,6 @@ fetch_vex:
     project_name:
       type: str
       help: Project name as it is known to Dependency-Track
-    project_version:
-      type: str
-      help: Project version as it is known to Dependency-Track
     deptrack_url:
       type: str
       help: Dependency-Track instance to connect to

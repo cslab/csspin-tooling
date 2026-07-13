@@ -48,7 +48,7 @@ must at least contain the following configuration.
         version: "3.11.9"
     fetch_vex:
         deptrack_url: "<your Dependency-Track URL>"
-        project_version: "<your project version>"
+        deptrack_api_key: "<your Dependency-Track API key>"
 
 Note that ``csspin_tooling.fetch_vex.deptrack_api_key`` is also required but
 storing secrets in configuration files is highly discouraged. The API key should
@@ -60,7 +60,7 @@ How to retrieve a VEX file?
 To retrieve a VEX file, you will need an API key for the Dependency-Track
 instance you are going to access. You also need the name of your project as it
 is tracked in Dependency-Track and the project version you want to retrieve the
-VEX file for.
+VEX file for. The project version is given directly via CLI.
 
 For example, the required values can be set with environment variables:
 
@@ -69,14 +69,13 @@ For example, the required values can be set with environment variables:
 
     export SPIN_TREE_FETCH_VEX__DEPTRACK_URL="<your Dependency-Track URL>"
     export SPIN_TREE_FETCH_VEX__DEPTRACK_API_KEY="<your API key>"
-    export SPIN_TREE_FETCH_VEX__PROJECT_VERSION="16.2.0"
 
 When everything is configured, call the plugin to download the VEX file:
 
 .. code-block:: console
     :caption: Running the fetch_vex plugin
 
-     spin fetch-vex
+     spin fetch-vex <PROJECT_VERSION>
 
 ``csspin_tooling.fetch_vex`` schema reference
 #############################################
