@@ -50,4 +50,4 @@ Enhancements
 ------------
 
 - Add ``sbomasm`` plugin for assembling and enriching CycloneDX SBOMs
-  (`!1 <https://code.contact.de/qs/spin/csspin-tooling/-/merge_requests/1>`_)
+  (`!1 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/1>`_)
