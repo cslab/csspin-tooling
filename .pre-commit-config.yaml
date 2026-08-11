@@ -23,7 +23,7 @@ repos:
   # ------------------Format Hooks--------------- #
   - repo: https://github.com/ambv/black
     # Black is a PEP 8 compliant opinionated code formatter.
-    rev: 26.3.1
+    rev: 26.5.1
     hooks:
       - id: black
         types: [file] # override `types: [python]`
@@ -45,7 +45,7 @@ repos:
         files: \.(pyi?|ue)$
   - repo: https://github.com/rbubley/mirrors-prettier
     # Prettier is an opinionated code formatter for JS, TS, json etc.
-    rev: v3.8.3
+    rev: v3.9.6
     hooks:
       - id: prettier
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
@@ -84,7 +84,7 @@ repos:
       # Trims trailing whitespace.
       - id: trailing-whitespace
   - repo: https://github.com/homebysix/pre-commit-macadmin
-    rev: v1.24.1
+    rev: v1.25.1
     hooks:
       # Checks, whether a correct identity is used to commit/ push
       - id: check-git-config-email
@@ -102,7 +102,7 @@ repos:
         files: \.(pyi?|ue)$
   - repo: https://github.com/pycqa/pylint
     # Linting of Python 3 files
-    rev: v4.0.5
+    rev: v4.0.7
     hooks:
       - id: pylint
         args:
@@ -122,7 +122,7 @@ repos:
         files: \.(pyi?|ue)$
   # Mypy for type assurance
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1
+    rev: v2.3.0
     hooks:
       - id: mypy
         exclude: ^tests/
