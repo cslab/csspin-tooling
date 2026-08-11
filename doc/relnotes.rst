@@ -41,6 +41,41 @@
 Release Notes
 =============
 
+v1.0.0
+======
+
+August 11, 2026
+
+Enhancements
+------------
+
+- Add ``sbomasm`` plugin for assembling CycloneDX SBOMs
+  (`!1 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/1>`_)
+- Add ``fetch_vex`` plugin to download a project's VEX file from
+  Dependency-Track (`!3
+  <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/3>`_)
+- Add ``sbomqs`` plugin as an SBOM quality gate
+  (`!5 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/5>`_)
+- ``fetch_vex`` now takes the project version directly via CLI instead of
+  spin configuration (`!6
+  <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/6>`_)
+
+Chores
+------
+
+- Extend the primary SBOM instead of merging into a new root, and drop
+  enrichment (`!4
+  <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/4>`_)
+- Update default sbomasm 2.0.3 -> 2.0.8
+  (`!7 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/7>`_)
+- Drop ``sbomasm.use`` and change ``sbomasm.install_dir``
+  (`!8 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/8>`_)
+- Add SonarQube analysis
+  (`!9 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/9>`_)
+- Update CI includes and stale references after move to pod/components
+  (`!11
+  <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/11>`_)
+
 v1.0.0-rc1
 ===========
 
