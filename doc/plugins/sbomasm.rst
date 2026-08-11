@@ -21,17 +21,9 @@ csspin_tooling.sbomasm
 ======================
 
 The ``csspin_tooling.sbomasm`` plugin provides SBOM (Software Bill of Materials)
-assembly and enrichment for CONTACT Elements-based projects. It downloads and
-manages `sbomasm`_ and exposes two separate tasks: one to merge multiple
-`CycloneDX`_ SBOM files into a single top-level SBOM, and one to enrich the
-result with CONTACT Elements-specific metadata extracted from the Python
-project configuration. A single SBOM is supported too — in that case the merge
-step is a pass-through and only the enrichment step modifies the file.
-
-The ``sbomasm`` plugin uses the ``csspin-python.python`` plugin to determine the
-metadata for the enrichment step. These include the project name, version,
-author, supplier, and license. Other sources of metadata are currently not
-supported.
+assembly for CONTACT Elements-based projects. It downloads and manages
+`sbomasm`_ and exposes a task that extends a primary `CycloneDX`_ SBOM with
+every other SBOM found alongside it.
 
 How to set up the ``csspin_tooling.sbomasm`` plugin?
 ####################################################
@@ -58,48 +50,21 @@ available for all subsequent tasks:
 
     spin provision
 
-How to assemble and enrich an SBOM?
-###################################
+How to assemble an SBOM?
+########################
 
-Both tasks hook into the ``sbomasm`` task group and the ``sbom`` workflow. If
-`csspin-workflows.stdworkflows`_ is enabled, they run in the following order:
-
-* ``sbomasm assemble`` collects all ``*.cdx.json`` files in the current
-  directory (excluding the output file) and merges them into the output file.
-  With a single input file the merge is a pass-through copy.
-* ``sbomasm enrich`` then edits the output file in place, applying project
-  metadata (name, version, author, supplier, license) to the primary component.
-  The following fields must be present in the project's
-  metadata (i.e. in defined via ``pyproject.toml``); the task aborts if any are
-  missing:
-
-  * ``name`` (e.g. ``customer.plm``)
-  * ``version`` (e.g. ``v1.2.3``)
-  * ``license`` — SPDX expression, e.g. ``MIT``
-  * Author information — each author must have both a name and an email
-    address. The expected format depends on the build backend:
-
-    ``pyproject.toml`` (PEP 621):
-
-    .. code-block:: toml
-
-        [project]
-        authors = [
-            {name = "Good Employee", email = "good.employee@work.com"},
-        ]
-
-    ``setup.py`` / ``setup.cfg``:
-
-    .. code-block:: python
-
-        author = "Good Employee"
-        author_email = "good.employee@work.com"
+The ``sbomasm assemble`` task hooks into the ``sbomasm`` task group and the
+``sbom`` workflow. It resolves the primary SBOM from the
+``sbomasm.primary_sbom`` glob and merges every other ``*.cdx.json`` file in the
+current directory (excluding the output file) into it. A glob matching nothing
+is a hard error but if it matches several files, the first (sorted) one is the
+primary and the rest are merged in as regular inputs. With only the primary
+present, the merge is a pass-through copy.
 
 .. code-block:: console
-    :caption: Assemble and enrich
+    :caption: Assemble
 
     spin sbomasm assemble
-    spin sbomasm enrich
 
 The output file defaults to ``<project_name>.cdx.json``. Its location can be
 overridden via the ``sbomasm.output_file`` option.

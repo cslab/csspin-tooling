@@ -8,15 +8,15 @@ plugins.
 ### `sbomasm`
 
 Wraps the [sbomasm](https://github.com/interlynk-io/sbomasm) CLI. Exposed as a
-task group with two tasks, each hooked into the `sbom:*` lifecycle via `when=`:
+task group with one task, hooked into the `sbom:*` lifecycle via `when=`:
 
-- `sbomasm assemble` (`when="sbom:assemble"`) — merges `*.cdx.json` SBOMs into
-  one. Single-input case is a pass-through copy (sbomasm itself rejects single
-  inputs).
-- `sbomasm enrich` (`when="sbom:enrich"`) — enriches the assembled SBOM's
-  primary component with project metadata (name, version, author, license)
-  extracted via `csspin_python.python.get_project_metadata`. Authors are parsed
-  from RFC 2822 `Author-email` into sbomasm's `name (email)` format.
+- `sbomasm assemble` (`when="sbom:assemble"`) — resolves a primary SBOM from
+  the `primary_sbom` glob (the Python SBOM by default) and extends it with
+  every other `*.cdx.json` SBOM found alongside it via `sbomasm assemble
+--flatMerge --primary`. With only the primary present, the merge is a
+  pass-through copy. A glob matching nothing is a hard error. Input SBOMs are
+  expected to already carry their own metadata (name, version, author,
+  license) — this plugin does no enrichment of its own.
 
 `provision(cfg)` always downloads the sbomasm release binary (Linux/Windows
 x86_64) into `{spin.data}/csspin_tooling/sbomasm/{version}` if not cached.
@@ -65,7 +65,8 @@ Runtime dep: `requests`. No `provision` step.
 ## Schemas
 
 - `sbomasm_schema.yaml` — `version` (sbomasm release), `install_dir`,
-  `output_file` (default `{spin.project_name}.cdx.json`),
+  `output_file` (default `{spin.project_name}.cdx.json`), `primary_sbom`
+  (glob, default `{spin.project_name}*.python_sbom.cdx.json`),
   `format.spec` (`cyclonedx` or `spdx`), `format.version`.
 - `sbomqs_schema.yaml` — `version` (sbomqs release), `install_dir`,
   `input_file` (default `{spin.project_name}.cdx.json`),
@@ -79,8 +80,8 @@ Runtime dep: `requests`. No `provision` step.
 ## Deps
 
 - Runtime (`pyproject.toml`): `csspin-python`, `requests`.
-- Sibling plugins: `csspin` (core), `csspin-python` (Python interpreter +
-  `get_project_metadata`).
+- Sibling plugins: `csspin` (core), `csspin-python` (produces the
+  `*.python_sbom.cdx.json` file `sbomasm` uses as its default primary SBOM).
 - Build/dev: setuptools, setuptools_scm, pytest, pytest-cov, mypy, pylint,
   black, isort.
 
@@ -105,9 +106,9 @@ prek run --all-files # run linting and formatting
 - Run provisioning tests only in case something for the provisioning has
   changed.
 - **`spin <task>` is for exploratory verification** — e.g., running
-  `spin sbomasm assemble` / `spin sbomasm enrich` / `spin sbomqs policy` /
-  `spin fetch_vex` to confirm the plugins behave as expected during
-  development. It is not the test runner.
+  `spin sbomasm assemble` / `spin sbomqs policy` / `spin fetch_vex` to confirm
+  the plugins behave as expected during development. It is not the test
+  runner.
 - Python ≥3.10.
 - Pre-commit hooks (run via `prek`): mypy (strict), pylint, black, isort.
 
@@ -115,10 +116,8 @@ prek run --all-files # run linting and formatting
 
 - **CycloneDX is the default SBOM format**; SPDX is reachable via the
   `sbomasm` schema config, not a separate task.
-- **`enrich` is independent of `assemble`** — both run on the project's output
-  SBOM and can be invoked separately.
-- **Metadata extraction requires a properly configured `pyproject.toml`** in
-  the consuming project. `sbomasm enrich` dies on missing name/version/license;
-  authors must each carry both a name and an email.
+- **`sbomasm` does no enrichment** — the primary SBOM it extends must already
+  carry complete metadata (name, version, author, license); that's produced
+  upstream (e.g. by `csspin-python`'s SBOM generation), not by this plugin.
 - **Docs**: `doc/` is built with `csspin_docs.sphinx`. Schema reference pages
   are generated from the schemas via `schemadoc` build rules in `spinfile.yaml`.
