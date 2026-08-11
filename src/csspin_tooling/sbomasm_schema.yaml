@@ -5,8 +5,7 @@
 sbomasm:
   type: object
   help: |
-    The sbomasm plugin wraps around the sbomasm tool for for assembling and
-    enriching SBOMs.
+    The sbomasm plugin wraps around the sbomasm tool for assembling SBOMs.
   properties:
     version:
       type: str
@@ -17,14 +16,19 @@ sbomasm:
     output_file:
       type: path
       help: The file path to write the generated SBOM to
+    primary_sbom:
+      type: str
+      help: |
+        Glob for the primary SBOM to extend with all other SBOMs. Must match at
+        least one file; if it matches several, the first (sorted) one is used.
     format:
       type: object
       help: Configuration regarding the output format of the generated SBOM
       properties:
-        name:
+        spec:
           type: str
           help: |
-            The name of the output format to use
+            The output format specification to use (cyclonedx or spdx)
         version:
           type: str
           help: The version of the output format to use
