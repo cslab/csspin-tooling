@@ -20,41 +20,16 @@
 from __future__ import annotations
 
 import os
-import shlex
 import subprocess
 import sys
 from pathlib import Path as PathlibPath
 
 import pytest
 
-YAMLS = "tests/integration/yamls"
+from .helpers import execute_spin
+
 SBOMASM_VERSION = "2.0.3"
-SBOMQS_VERSION = "2.0.9"
-
-
-def execute_spin(yaml: str, env: PathlibPath, cmd: str = "") -> str:
-    """Run spin and return combined stdout; re-raise CalledProcessError with output."""
-    base = [
-        "spin",
-        "-p",
-        f"spin.data={env}",
-        "-C",
-        YAMLS,
-        "--env",
-        str(env),
-        "-f",
-        yaml,
-    ]
-    extra = shlex.split(cmd) if cmd else []
-    try:
-        return subprocess.check_output(
-            base + extra,
-            encoding="utf-8",
-            stderr=subprocess.STDOUT,
-        ).strip()
-    except subprocess.CalledProcessError as ex:
-        print(ex.output)
-        raise
+SBOMQS_VERSION = "2.0.12"
 
 
 def _binary(

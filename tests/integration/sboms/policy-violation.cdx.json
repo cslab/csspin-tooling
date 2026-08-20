@@ -1,0 +1,38 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:6b7a5e2b-3f0b-4a5f-9f3f-6f6f6a5b8b9a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-18T09:03:27Z",
+    "component": {
+      "bom-ref": "policy-violation@1.0.0",
+      "type": "application",
+      "name": "policy-violation",
+      "version": "1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-3.0-only"
+          }
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "policy-violation@1.0.0",
+      "type": "application",
+      "name": "policy-violation",
+      "version": "1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-3.0-only"
+          }
+        }
+      ]
+    }
+  ]
+}

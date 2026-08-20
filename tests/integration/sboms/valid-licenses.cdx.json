@@ -1,0 +1,75 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:987b65c4-cb30-4959-83b3-9fce51bb4b8a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-18T09:03:27Z",
+    "component": {
+      "bom-ref": "cs.template@2027.1.1.1.dev32",
+      "type": "application",
+      "authors": [
+        {
+          "bom-ref": "sbomasm:78e20d82-36b0-49d2-a396-cac0acf8745f",
+          "name": "CONTACT Software",
+          "email": "info@contact-software.com"
+        }
+      ],
+      "name": "cs.template",
+      "version": "2027.1.1.1.dev32",
+      "licenses": [
+        {
+          "license": {
+            "bom-ref": "sbomasm:247dfd59-14de-46fe-b73d-c6acf48f9c5c",
+            "name": "LicenseRef-CONTACT-Software-General-1.0"
+          }
+        }
+      ]
+    },
+    "licenses": [
+      {
+        "license": {
+          "id": "CC0-1.0"
+        }
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "cs.template@2027.1.1.1.dev32",
+      "type": "application",
+      "authors": [
+        {
+          "bom-ref": "sbomasm:abb75701-988e-4a02-a15b-fef7216a3401",
+          "name": "CONTACT Software",
+          "email": "info@contact-software.com"
+        }
+      ],
+      "name": "cs.template",
+      "version": "2027.1.1.1.dev32",
+      "licenses": [
+        {
+          "license": {
+            "bom-ref": "sbomasm:6059cc8e-c988-4788-a52a-63ae93646f87",
+            "name": "LicenseRef-CONTACT-Software-General-1.0"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "cs.template@2027.1.1.1.dev32",
+      "dependsOn": [
+        "cs.template@2027.1.1.1.dev32"
+      ]
+    },
+    {
+      "ref": "cs.template@2027.1.1.1.dev32",
+      "dependsOn": [
+        "cs.template@2027.1.1.1.dev32"
+      ]
+    }
+  ]
+}
