@@ -21,9 +21,11 @@ csspin_tooling.sbomqs
 =====================
 
 The ``csspin_tooling.sbomqs`` plugin gates an SBOM against a quality policy.
-It downloads and manages `sbomqs`_ and exposes a single task that runs
-``sbomqs policy`` against the project's `CycloneDX`_ SBOM. The task exits
-non-zero on policy violations, so it can be used as a blocking gate e.g., in CI.
+It downloads and manages `sbomqs`_ and exposes two tasks against the project's
+`CycloneDX`_ SBOM: ``sbomqs policy`` runs ``sbomqs policy``, and
+``sbomqs comp-valid-licenses`` fails on components whose license sbomqs cannot
+validate. Both exit non-zero on a violation, so they can be used as blocking
+gates e.g., in CI.
 
 How to set up the ``csspin_tooling.sbomqs`` plugin?
 ###################################################
@@ -62,6 +64,24 @@ command group, invoked after ``spin sbom`` has produced the SBOM:
     spin sbomqs policy
 
 When the SBOM violates the policy, the task terminates with a non-zero exit code.
+
+How to check license validity?
+##############################
+
+The ``sbomqs comp-valid-licenses`` task fails when a component carries a license
+that sbomqs cannot validate. It uses the ``comp_valid_licenses`` feature, which
+checks each license for compliance with the SPDX license expression
+specification (SPDX-listed IDs, ``LicenseRef-`` references, and
+``AND``/``OR``/``WITH`` expressions) and rejects only those that are not
+valid SPDX expressions:
+
+.. code-block:: console
+    :caption: Check component licenses
+
+    spin sbomqs comp-valid-licenses
+
+The task lists the offending components and terminates with a non-zero exit
+code when any component has an invalid (or missing) license.
 
 How to use a custom policy?
 ###########################

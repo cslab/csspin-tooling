@@ -31,10 +31,7 @@ for _mod in (
 ):
     sys.modules.setdefault(_mod, MagicMock())
 
-from csspin_tooling.sbomqs import (  # noqa: 402
-    configure,
-    default_policy_file,
-)
+from csspin_tooling.sbomqs import configure, default_policy_file  # noqa: 402
 
 
 def test_default_policy_file() -> None:

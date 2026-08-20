@@ -27,12 +27,11 @@ from typing import Generator
 
 import pytest
 
+from .helpers import YAML_SBOMQS, execute_spin
 
-@pytest.fixture()
-def tmp_path(
-    tmp_path_factory: pytest.TempPathFactory, request: pytest.FixtureRequest
-) -> Generator[PathlibPath, None, None]:
-    """Like the built-in tmp_path, but with a short directory name.
+
+def short_tmp_dir(name: str, tmp_path_factory: pytest.TempPathFactory) -> PathlibPath:
+    """Create a temp directory whose path stays below Windows' MAX_PATH limit.
 
     Pytest normally embeds the full test name into the temp directory, which
     easily exceeds Windows' 260-char MAX_PATH limit when the runner's base path
@@ -44,7 +43,6 @@ def tmp_path(
     name still overflows. Instead we create the directory directly under the
     system temp root (C:\\Windows\\Temp or equivalent) where the base is short.
     """
-    name = request.node.name
     suffix = hashlib.sha256(name.encode()).hexdigest()[:6]
 
     # TODO: Remove this override once the Windows GitLab runners no longer enforce
@@ -56,9 +54,23 @@ def tmp_path(
     if sys.platform == "win32":
         # On Windows: use the system drive root temp dir to keep total path short.
         drive = PathlibPath(tempfile.gettempdir()).anchor  # e.g. "C:\\"
-        base = PathlibPath(drive) / "pytest-tmp"
-        path = base / short
+        path = PathlibPath(drive) / "pytest-tmp" / short
         path.mkdir(parents=True, exist_ok=True)
-        yield path
-    else:
-        yield tmp_path_factory.mktemp(short, numbered=True)
+        return path
+    return tmp_path_factory.mktemp(short, numbered=True)
+
+
+@pytest.fixture()
+def tmp_path(
+    tmp_path_factory: pytest.TempPathFactory, request: pytest.FixtureRequest
+) -> Generator[PathlibPath, None, None]:
+    """Like the built-in tmp_path, but with a short directory name."""
+    yield short_tmp_dir(request.node.name, tmp_path_factory)
+
+
+@pytest.fixture(scope="module")
+def sbomqs_env(tmp_path_factory: pytest.TempPathFactory) -> PathlibPath:
+    """A spin environment with sbomqs provisioned, shared across a test module."""
+    env = short_tmp_dir("sbomqs", tmp_path_factory)
+    execute_spin(yaml=YAML_SBOMQS, env=env, cmd="provision")
+    return env

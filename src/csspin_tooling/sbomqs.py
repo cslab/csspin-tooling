@@ -19,6 +19,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from importlib import resources
@@ -46,7 +47,7 @@ def default_policy_file(cfg: ConfigTree) -> Path:  # pylint: disable=unused-argu
 
 
 defaults = config(
-    version="2.0.9",
+    version="2.0.12",
     install_dir="{spin.data}/csspin_tooling/sbomqs",
     input_file="{spin.project_name}.cdx.json",
     policy_file=default_policy_file,
@@ -87,6 +88,45 @@ def policy(cfg: ConfigTree) -> None:
     info(f"Check {sbom} against policy {policy_file}")
     extra = ["-o", "table"] if cfg.verbosity > Verbosity.NORMAL else []
     sh("sbomqs", "policy", "-f", str(policy_file), *extra, str(sbom))
+
+
+@sbomqs.task(when="sbom:quality")
+def comp_valid_licenses(cfg: ConfigTree) -> None:
+    """Fail if any component carries a license sbomqs cannot validate.
+
+    Uses the ``comp_valid_licenses`` feature, which checks each license for
+    compliance with the SPDX license expression specification (SPDX-listed
+    IDs, ``LicenseRef-`` references, and ``AND``/``OR``/``WITH`` expressions),
+    rejecting only strings that are not valid SPDX expressions.
+    """
+    sbom = cfg.sbomqs.input_file
+    if not exists(sbom):
+        die(f"Cannot check {sbom}: file does not exist.")
+
+    info(f"Check {sbom} for components with invalid licenses")
+    result = sh(
+        "sbomqs",
+        "list",
+        "--feature",
+        "comp_valid_licenses",
+        "--missing",
+        "--json",
+        str(sbom),
+        capture_output=True,
+        text=True,
+    )
+    # Components reported as missing the feature are the ones whose license
+    # sbomqs could not validate.
+    invalid = [
+        (comp.get("name", ""), comp.get("version", ""))
+        for file_entry in json.loads(result.stdout).get("files", [])
+        for comp in file_entry.get("components") or []
+    ]
+    if invalid:
+        listed = "\n".join(f"  - {name} ({version})" for name, version in invalid)
+        die(f"{sbom} has components with invalid licenses:\n{listed}")
+    else:
+        info(f"{sbom} has no components with invalid licenses")
 
 
 # -- Internals -----------------------------------------------------------------

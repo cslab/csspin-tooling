@@ -28,12 +28,24 @@ override.
 ### `sbomqs`
 
 Wraps the [sbomqs](https://github.com/interlynk-io/sbomqs) CLI. Quality gate for
-the assembled SBOM, invoked standalone after `spin sbom` (no `when=` lifecycle
-hook). Exposed as a task group with one task:
+the assembled SBOM. Exposed as a task group with two tasks, both hooked into the
+`sbom:quality` lifecycle via `when=`:
 
 - `sbomqs policy` — runs `sbomqs policy -f <policy_file> <input_file>` via
   `sh` (`check=True`), so a policy violation makes the task exit non-zero. The
   policy applies uniformly to every component, including nested ones.
+- `sbomqs comp-valid-licenses` (function `comp_valid_licenses`, click hyphenates
+  the name) — runs `sbomqs list --feature comp_valid_licenses --missing --json`
+  and dies if any component is reported. `comp_valid_licenses` is a generic
+  feature (no `--profile` needed). It was added upstream in sbomqs
+  [#700](https://github.com/interlynk-io/sbomqs/pull/700) (released in 2.0.11)
+  and validates each license against the SPDX license expression specification
+  (SPDX-listed IDs, `LicenseRef-` references, `AND`/`OR`/`WITH` expressions),
+  flagging only strings that are not valid SPDX expressions.
+  `--missing` also reports components with no license at all, so the task gates
+  on invalid-or-missing licenses. Components listed under `files[].components`
+  in that JSON are the offending ones. The task is covered by the integration
+  tests; there are no unit tests for the parsing.
 
 `provision(cfg)` always downloads the sbomqs release binary (Linux/Windows
 x86_64) into `{spin.data}/csspin_tooling/sbomqs/{version}`. The download itself
@@ -101,10 +113,19 @@ prek run --all-files # run linting and formatting
   plugin. No separate `pip install -e .` step.
 - **Tests run via plain `pytest`**, not `spin test`. `tests/unit/` holds the
   unit tests (`test_sbomasm.py`, `test_sbomqs.py`, `test_fetch_vex.py`);
-  `tests/integration/`
-  shells out to `spin` to exercise provisioning end-to-end.
+  `tests/integration/` shells out to `spin` (via the shared `execute_spin`
+  helper in `tests/integration/helpers.py`) to exercise provisioning and the
+  real tool binaries end-to-end.
 - Run provisioning tests only in case something for the provisioning has
   changed.
+- `tests/integration/test_sbomqs.py` runs `comp-valid-licenses` against the
+  fixture SBOMs in `tests/integration/sboms/`. Both are real `spin sbom` output
+  from cs.template. `valid-licenses.cdx.json` carries
+  `LicenseRef-CONTACT-Software-General-1.0`, which sbomqs 2.0.10 and 2.0.11
+  wrongly reject, so the test fails if the version pin drops below 2.0.12.
+  `invalid-licenses.cdx.json` is the same SBOM with that license written as plain
+  text (no `LicenseRef-` prefix), which is not a valid SPDX expression.
+  The tests assert nothing about output: the task either exits zero or dies.
 - **`spin <task>` is for exploratory verification** — e.g., running
   `spin sbomasm assemble` / `spin sbomqs policy` / `spin fetch_vex` to confirm
   the plugins behave as expected during development. It is not the test

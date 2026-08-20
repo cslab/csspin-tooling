@@ -2,5 +2,3 @@ plugin_packages:
   - ../../..
 plugins:
   - csspin_tooling.sbomqs
-sbomqs:
-  version: "2.0.9"
