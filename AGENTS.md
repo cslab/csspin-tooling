@@ -60,7 +60,7 @@ The `policy_file` default is a callable (`default_policy_file`) resolving via
 `importlib.resources` to the bundled `policies/default.yaml`; the `configure`
 hook materializes it during defaults (same pattern as `csspin_ce.mkinstance`). A
 configured path replaces it entirely. The default blacklists copyleft licenses
-(`GPL-.*`, `EUPL-.*`,
+(`^GPL-.*`, `^AGPL-.*`, `EUPL-.*`,
 `CC-BY-SA/NC/ND`) and requires `name`/`version`/`license` on every component.
 
 ### `fetch_vex`

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:1c3d9f4a-8b2e-4c1a-9e5d-2a7b6c4f0d3e",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-18T09:03:27Z",
+    "component": {
+      "bom-ref": "policy-lgpl-allowed@1.0.0",
+      "type": "application",
+      "name": "policy-lgpl-allowed",
+      "version": "1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "LGPL-3.0-only"
+          }
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "policy-lgpl-allowed@1.0.0",
+      "type": "application",
+      "name": "policy-lgpl-allowed",
+      "version": "1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "LGPL-3.0-only"
+          }
+        }
+      ]
+    }
+  ]
+}
