@@ -68,3 +68,9 @@ def test_policy_rejects_prohibited_license(sbomqs_env: PathlibPath) -> None:
     """The task dies on a component carrying a blacklisted (GPL) license."""
     with pytest.raises(subprocess.CalledProcessError):
         _run_task("policy", "policy-violation.cdx.json", sbomqs_env)
+
+
+@pytest.mark.integration
+def test_policy_accepts_lgpl_license(sbomqs_env: PathlibPath) -> None:
+    """The task passes on a component carrying an LGPL license, unlike GPL/AGPL."""
+    _run_task("policy", "policy-lgpl-allowed.cdx.json", sbomqs_env)

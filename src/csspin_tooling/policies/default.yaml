@@ -29,7 +29,8 @@ policy:
     rules:
       - field: license
         patterns:
-          - GPL-.* # includes LGPL and AGPL
+          - ^GPL-.*
+          - ^AGPL-.*
           - EUPL-.*
           - CC-BY-SA.*
           - CC-BY-NC.*
