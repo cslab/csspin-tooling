@@ -7,7 +7,7 @@
   "metadata": {
     "timestamp": "2026-08-18T09:03:27Z",
     "component": {
-      "bom-ref": "cs.template@2027.1.1.1.dev32",
+      "bom-ref": "some-dummy-package@2027.1.1.1.dev32",
       "type": "application",
       "authors": [
         {
@@ -16,7 +16,7 @@
           "email": "info@contact-software.com"
         }
       ],
-      "name": "cs.template",
+      "name": "some-dummy-package",
       "version": "2027.1.1.1.dev32",
       "licenses": [
         {
@@ -37,7 +37,7 @@
   },
   "components": [
     {
-      "bom-ref": "cs.template@2027.1.1.1.dev32",
+      "bom-ref": "some-dummy-package@2027.1.1.1.dev32",
       "type": "application",
       "authors": [
         {
@@ -46,7 +46,7 @@
           "email": "info@contact-software.com"
         }
       ],
-      "name": "cs.template",
+      "name": "some-dummy-package",
       "version": "2027.1.1.1.dev32",
       "licenses": [
         {
@@ -60,15 +60,15 @@
   ],
   "dependencies": [
     {
-      "ref": "cs.template@2027.1.1.1.dev32",
+      "ref": "some-dummy-package@2027.1.1.1.dev32",
       "dependsOn": [
-        "cs.template@2027.1.1.1.dev32"
+        "some-dummy-package@2027.1.1.1.dev32"
       ]
     },
     {
-      "ref": "cs.template@2027.1.1.1.dev32",
+      "ref": "some-dummy-package@2027.1.1.1.dev32",
       "dependsOn": [
-        "cs.template@2027.1.1.1.dev32"
+        "some-dummy-package@2027.1.1.1.dev32"
       ]
     }
   ]

@@ -22,3 +22,6 @@ sbomqs:
       help: |
         Path to a policy file to gate against. Defaults to the bundled default
         policy; set this to override it.
+    comp_valid_licenses_ignored_components:
+      type: list
+      help: Component names to exempt from the comp-valid-licenses check.
