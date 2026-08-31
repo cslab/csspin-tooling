@@ -118,9 +118,12 @@ prek run --all-files # run linting and formatting
   real tool binaries end-to-end.
 - Run provisioning tests only in case something for the provisioning has
   changed.
+- Single test: `pytest tests/unit/test_sbomqs.py::test_name`. Skip the slow
+  integration tests during regular iteration with `pytest -m "not integration"`.
 - `tests/integration/test_sbomqs.py` runs `comp-valid-licenses` against the
   fixture SBOMs in `tests/integration/sboms/`. Both are real `spin sbom` output
-  from cs.template. `valid-licenses.cdx.json` carries
+  from cs.template, with the component renamed to `some-dummy-package`.
+  `valid-licenses.cdx.json` carries
   `LicenseRef-CONTACT-Software-General-1.0`, which sbomqs 2.0.10 and 2.0.11
   wrongly reject, so the test fails if the version pin drops below 2.0.12.
   `invalid-licenses.cdx.json` is the same SBOM with that license written as plain

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:987b65c4-cb30-4959-83b3-9fce51bb4b8b",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-25T09:03:27Z",
+    "component": {
+      "bom-ref": "some-dummy-package@2027.2.0.0.dev1",
+      "type": "application",
+      "name": "some-dummy-package",
+      "version": "2027.2.0.0.dev1",
+      "licenses": [
+        {
+          "license": {
+            "bom-ref": "sbomasm:247dfd59-14de-46fe-b73d-c6acf48f9c5d",
+            "name": "CONTACT Software General License 1.0"
+          }
+        }
+      ]
+    },
+    "licenses": [
+      {
+        "license": {
+          "id": "CC0-1.0"
+        }
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "some-dummy-package@2027.2.0.0.dev1",
+      "type": "application",
+      "name": "some-dummy-package",
+      "version": "2027.2.0.0.dev1",
+      "licenses": [
+        {
+          "license": {
+            "bom-ref": "sbomasm:6059cc8e-c988-4788-a52a-63ae93646f88",
+            "name": "CONTACT Software General License 1.0"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "some-dummy-package@2027.2.0.0.dev1",
+      "dependsOn": [
+        "some-dummy-package@2027.2.0.0.dev1"
+      ]
+    }
+  ]
+}

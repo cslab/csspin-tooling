@@ -83,14 +83,34 @@ valid SPDX expressions:
 The task lists the offending components and terminates with a non-zero exit
 code when any component has an invalid (or missing) license.
 
+How to ignore a component's license findings?
+#############################################
+
+Some packages carry a deprecated license classifier or another
+non-SPDX-compliant license value, which fails the check. Add the package name to
+``sbomqs.comp_valid_licenses_ignored_components`` to suppress it:
+
+.. code-block:: yaml
+    :caption: Ignoring a component's license findings
+
+    sbomqs:
+      comp_valid_licenses_ignored_components:
+        - aiofiles
+
+This might be appropriate for some time. The recommendation is to inform the
+maintainer about the fact that their project metadata is not compliant with PEP
+639, so they become aware of that and may fix it soon, so the package can be
+removed from the suppression list. The goal is to not have any package on this
+suppression list.
+
 How to use a custom policy?
 ###########################
 
 When ``sbomqs.policy_file`` is unset, the plugin uses the policy bundled with
 the package. The default blacklists copyleft licenses incompatible with
-commercial distribution (``GPL-.*`` including LGPL and AGPL, ``EUPL-.*``, and
-the ``CC-BY-SA``/``CC-BY-NC``/``CC-BY-ND`` family) and requires every component
-to carry a ``name``, ``version``, and ``license``.
+commercial distribution (``GPL-.*``, ``AGPL-.*``, ``EUPL-.*``, and the
+``CC-BY-SA``/``CC-BY-NC``/``CC-BY-ND`` family; ``LGPL-*`` is exempt) and
+requires every component to carry a ``name``, ``version``, and ``license``.
 
 Set ``sbomqs.policy_file`` to a local path to replace the bundled default
 entirely:

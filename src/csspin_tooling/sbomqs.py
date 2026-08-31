@@ -36,6 +36,7 @@ from csspin import (
     info,
     setenv,
     sh,
+    warn,
 )
 from csspin.tree import ConfigTree
 from path import Path
@@ -92,7 +93,7 @@ def policy(cfg: ConfigTree) -> None:
 
 @sbomqs.task(when="sbom:quality")
 def comp_valid_licenses(cfg: ConfigTree) -> None:
-    """Fail if any component carries a license sbomqs cannot validate.
+    """Fail if any unignored component carries a license sbomqs cannot validate.
 
     Uses the ``comp_valid_licenses`` feature, which checks each license for
     compliance with the SPDX license expression specification (SPDX-listed
@@ -116,17 +117,31 @@ def comp_valid_licenses(cfg: ConfigTree) -> None:
         text=True,
     )
     # Components reported as missing the feature are the ones whose license
-    # sbomqs could not validate.
-    invalid = [
-        (comp.get("name", ""), comp.get("version", ""))
+    # are non-SPDX compliant.
+    non_compliant = {
+        comp.get("name", ""): comp.get("version", "")
         for file_entry in json.loads(result.stdout).get("files", [])
         for comp in file_entry.get("components") or []
-    ]
-    if invalid:
-        listed = "\n".join(f"  - {name} ({version})" for name, version in invalid)
+    }
+    ignored = set(cfg.sbomqs.comp_valid_licenses_ignored_components)
+    blocking = set(non_compliant) - ignored
+    unnecessary = ignored - set(non_compliant)
+
+    if unnecessary:
+        listed = "\n".join(f"  - {name}" for name in sorted(unnecessary))
+        warn(
+            "The spin configuration contains unnecessary suppressions. Please"
+            " remove the following entries from"
+            f" 'sbomqs.comp_valid_licenses_ignored_components':\n{listed}"
+        )
+
+    if blocking:
+        listed = "\n".join(
+            f"  - {name} ({non_compliant[name]})" for name in sorted(blocking)
+        )
         die(f"{sbom} has components with invalid licenses:\n{listed}")
-    else:
-        info(f"{sbom} has no components with invalid licenses")
+
+    info(f"{sbom} has no unignored components with invalid licenses")
 
 
 # -- Internals -----------------------------------------------------------------
