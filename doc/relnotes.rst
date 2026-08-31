@@ -41,6 +41,31 @@
 Release Notes
 =============
 
+v1.1.0
+======
+
+August 31, 2026
+
+Enhancements
+------------
+
+- sbomqs: There is no way to suppress expected license violations in SBOMs
+  (`#4 <https://code.contact.de/pod/components/csspin-tooling/-/work_items/4>`_)
+- sbomqs: Add comp_valid_licenses support
+  (`!10 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/10>`_)
+
+Bug Fixes
+---------
+
+- sbomqs: LGPL licenses should not be in the blacklist
+  (`#3 <https://code.contact.de/pod/components/csspin-tooling/-/work_items/3>`_)
+
+Chores
+------
+
+- Add CEDM component portfolio update to release procedure
+  (`!13 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/13>`_)
+
 v1.0.0
 ======
 
