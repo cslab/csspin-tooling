@@ -71,7 +71,7 @@ def test_provision(
 
     # 2. Ensure the tool's task group is runnable through spin (exits non-zero
     #    on failure, which execute_spin re-raises).
-    group_run = execute_spin(yaml=yaml, env=tmp_path, cmd=tool)
+    group_run = execute_spin(yaml=yaml, env=tmp_path, cmd=f"{tool} --help")
     assert f"spin {tool}" in group_run
 
     # 3. Ensure that a second regular provision run uses the cached binary
