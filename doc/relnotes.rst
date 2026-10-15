@@ -41,6 +41,21 @@
 Release Notes
 =============
 
+v1.1.1
+======
+
+October 15, 2026
+
+Chores
+------
+
+- Adapt integration test to click>=8.2 exit code for groups
+  (`#6 <https://code.contact.de/pod/components/csspin-tooling/-/work_items/6>`_)
+- Fix toml formatting
+  (`!18 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/18>`_)
+- Use CycloneDX 1.7 as default and drop ``.claude/``
+  (`!20 <https://code.contact.de/pod/components/csspin-tooling/-/merge_requests/20>`_)
+
 v1.1.0
 ======
 
