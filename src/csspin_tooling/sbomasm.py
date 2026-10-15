@@ -41,7 +41,7 @@ defaults = config(
     version="2.0.10",
     install_dir="{spin.data}/csspin_tooling/sbomasm",
     output_file="{spin.project_name}.cdx.json",
-    format=config(spec="cyclonedx", version="1.6"),
+    format=config(spec="cyclonedx", version="1.7"),
     primary_sbom="{spin.project_name}*.python_sbom.cdx.json",
     requires=config(spin=["csspin_python.python"]),
 )

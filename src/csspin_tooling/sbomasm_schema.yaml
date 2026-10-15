@@ -27,8 +27,7 @@ sbomasm:
       properties:
         spec:
           type: str
-          help: |
-            The output format specification to use (cyclonedx or spdx)
+          help: The output format specification to use (cyclonedx or spdx)
         version:
           type: str
           help: The version of the output format to use
